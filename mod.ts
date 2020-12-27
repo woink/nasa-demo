@@ -18,6 +18,20 @@ await log.setup({
   }
 })
 
+app.addEventListener("error", (e) => {
+  log.error(e.error)
+})
+
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    log.error(err)
+    ctx.response.body = "Internal server error"
+    throw err
+  }
+})
+
 app.use(async (ctx, next) => {
 	await next();
 	const time = ctx.response.headers.get('X-Response-Time');

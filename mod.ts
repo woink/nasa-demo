@@ -63,7 +63,7 @@ app.use(async (ctx) => {
 });
 
 if (import.meta.main) {
-	log.info(`Starting server on port ${PORT}....`);
+	log.info(`Server running on port ${PORT}`);
 	await app.listen({
 		port: PORT,
 	});

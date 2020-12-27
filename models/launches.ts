@@ -60,3 +60,19 @@ export function getOne(id: number) {
     return launches.get(id)
   }
 }
+
+export function addOne(data: Launch) {
+  launches.set(data.flightNumber, Object.assign(data, {
+    upcoming: true,
+    customers: ["NASA", "Test Rockets Company"]
+  }))
+}
+
+export function removeOne(id: number) {
+  const aborted = launches.get(id)
+  if (aborted) {
+    aborted.upcoming = false
+    aborted.success = false
+  }
+  return aborted
+}

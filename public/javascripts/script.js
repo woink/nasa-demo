@@ -35,8 +35,12 @@ function loadPlanets() {
 		});
 }
 
-function abortLaunch() {
-	
+function abortLaunch(id) {
+	return fetch(`/launches/${id}`, {
+		method: "delete"
+	})
+		.then(loadLaunches)
+	.then(listUpcoming)
 }
 
 function submitLaunch() {
@@ -46,21 +50,23 @@ function submitLaunch() {
 	const rocket = document.getElementById('rocket-name').value;
 	const flightNumber = launches[launches.length - 1]?.flightNumber + 1 || 1;
 
-	// TODO: Once API is ready.
-	// Submit above data to launch system and reload launches.
-
-	const customers = ['NASA', 'ZTIM'];
-
-	launches.push({
-		target,
-		launchDate: launchDate / 1000,
-		mission,
-		rocket,
-		flightNumber,
-		customers,
-		upcoming: true,
-	});
-	document.getElementById('launch-success').hidden = false;
+	return fetch("/launches", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify({
+			launchDate: Math.floor(launchDate / 1000),
+			flightNumber,
+			mission,
+			rocket,
+			target,
+		})
+	})
+		.then(() => {
+			document.getElementById('launch-success').hidden = false;
+		})
+		.then(loadLaunches)
 }
 
 function listUpcoming() {
